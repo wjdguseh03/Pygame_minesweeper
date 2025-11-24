@@ -71,9 +71,9 @@ class Board:
 
     def neighbors(self, col: int, row: int) -> List[Tuple[int, int]]:
         deltas = [
-             (-1, -1), (0, -1), (1, -1),
-             (-1, 0),            (1, 0),
-             (-1, 1),  (0, 1),  (1, 1)
+            (-1, -1), (0, -1), (1, -1),
+            (-1, 0),            (1, 0),
+            (-1, 1),  (0, 1),  (1, 1)
         ]
         
         result = []
@@ -85,19 +85,29 @@ class Board:
         return result
 
     def place_mines(self, safe_col: int, safe_row: int) -> None:
-        # TODO: Place mines randomly, guaranteeing the first click and its neighbors are safe. And Compute adjacency counts
-        # all_positions = [(c, r) for r in range(self.rows) for c in range(self.cols)]
-        # forbidden = {(safe_col, safe_row)} | set(self.neighbors(safe_col, safe_row))
-        # pool = [p for p in all_positions if p not in forbidden]
-        # random.shuffle(pool)
-        
-        # Compute adjacency counts
-        # for r in range(self.rows):
-        #     for c in range(self.cols):
-
-        # self._mines_placed = True
-
-        pass
+        # 1. 전체 좌표 생성
+        all_positions = [(c, r) for r in range(self.rows) for c in range(self.cols)]
+    
+        # 2. 안전지대: 첫 클릭 + 주변
+        forbidden = {(safe_col, safe_row)} | set(self.neighbors(safe_col, safe_row))
+    
+        # 3. 배치 가능한 위치만 필터
+        pool = [pos for pos in all_positions if pos not in forbidden]
+        random.shuffle(pool)
+    
+        # 4. 지뢰 배치
+        for c, r in pool[:self.num_mines]:
+            self.cells[self.index(c, r)].state.is_mine = True
+    
+        # 5. 각 셀 주변 지뢰 개수 계산
+        for cell in self.cells:
+            if not cell.state.is_mine:
+                count = sum(1 for nc, nr in self.neighbors(cell.col, cell.row)
+                            if self.cells[self.index(nc, nr)].state.is_mine)
+                cell.state.adjacent = count
+    
+        # 6. 지뢰 배치 완료 표시
+        self._mines_placed = True
 
     def reveal(self, col: int, row: int) -> None:
         # TODO: Reveal a cell; if zero-adjacent, iteratively flood to neighbors.
