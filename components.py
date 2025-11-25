@@ -110,15 +110,49 @@ class Board:
         self._mines_placed = True
 
     def reveal(self, col: int, row: int) -> None:
-        # TODO: Reveal a cell; if zero-adjacent, iteratively flood to neighbors.
-        # if not self.is_inbounds(col, row):
-        #     return
-        # if not self._mines_placed:
-        #     self.place_mines(col, row)
+        # 1) 범위 밖
+        if not self.is_inbounds(col, row):
+            return
 
-        
-        # self._check_win()
-        pass
+        cell = self.cells[self.index(col, row)]
+
+        # 2) 이미 오픈/깃발이면 무시
+        if cell.state.is_revealed or cell.state.is_flagged:
+            return
+
+        # 3) 첫 클릭이면 지뢰 배치
+        if not self._mines_placed:
+            self.place_mines(col, row)
+
+        # 4) 지뢰를 연 경우 → 게임오버
+        if cell.state.is_mine:
+            cell.state.is_revealed = True
+            self.game_over = True
+            self._reveal_all_mines()
+            return
+
+        # 5) 숫자 칸 또는 빈 칸 열기
+        # BFS/스택 flood fill (반복형)
+        stack = [(col, row)]
+        while stack:
+            c, r = stack.pop()
+            cur = self.cells[self.index(c, r)]
+
+            if cur.state.is_revealed:
+                continue
+
+            cur.state.is_revealed = True
+            self.revealed_count += 1
+
+            # 빈칸(0)인 경우 주변 확장
+            if cur.state.adjacent == 0:
+                for (nc, nr) in self.neighbors(c, r):
+                    nbr = self.cells[self.index(nc, nr)]
+                    if not nbr.state.is_revealed and not nbr.state.is_flagged:
+                        stack.append((nc, nr))
+
+        # 6) 승리 체크
+        self._check_win()
 
     def toggle_flag(self, col: int, row: int) -> None:
         # TODO: Toggle a flag on a non-revealed cell.
