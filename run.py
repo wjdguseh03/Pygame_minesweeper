@@ -96,6 +96,21 @@ class Renderer:
         rect = label.get_rect(center=(config.width // 2, config.height // 2))
         self.screen.blit(label, rect)
 
+    def restart_button_rect(self) -> Rect:
+    x = (config.width - config.restart_button_width) // 2
+    y = (config.height // 2) + 60
+    return Rect(x, y, config.restart_button_width, config.restart_button_height)
+
+    def draw_restart_button(self, mouse_pos) -> None:
+    rect = self.restart_button_rect()
+    hover = rect.collidepoint(mouse_pos)
+    color = config.restart_button_hover if hover else config.restart_button_color
+
+    pygame.draw.rect(self.screen, color, rect, border_radius=8)
+
+    label = self.font.render("RESTART", True, config.restart_button_text_color)
+    label_rect = label.get_rect(center=rect.center)
+    self.screen.blit(label, label_rect)
 
 class InputController:
     """Translates input events into game and board actions."""
@@ -117,9 +132,15 @@ class InputController:
 
     def handle_mouse(self, pos, button) -> None:
         game = self.game
-        if game.board.game_over ir game.board.win:
-            return
-            
+        # 게임 종료 상태
+        if game.board.game_over or game.board.win:
+            if button == config.mouse_left:
+                rect = game.renderer.restart_button_rect()
+                if rect.collidepoint(pos):
+                    game.reset()
+             return
+
+
         col, row = self.pos_to_grid(pos[0], pos[1])
         if col == -1:
             return
@@ -225,6 +246,9 @@ class Game:
                 highlighted = (now <= self.highlight_until_ms) and ((c, r) in self.highlight_targets)
                 self.renderer.draw_cell(c, r, highlighted)
         self.renderer.draw_result_overlay(self._result_text())
+        if self._result_text():
+            self.renderer.draw_restart_button(pygame.mouse.get_pos())
+
         pygame.display.flip()
 
     def run_step(self) -> bool:

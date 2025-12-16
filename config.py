@@ -101,3 +101,11 @@ difficulties = {
 }
 
 default_difficulty = "NORMAL"
+
+# Restart button
+restart_button_width = 200
+restart_button_height = 60
+restart_button_color = (80, 160, 80)
+restart_button_hover = (100, 180, 100)
+restart_button_text_color = (255, 255, 255)
+
