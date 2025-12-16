@@ -163,6 +163,7 @@ class Game:
 
         self.difficulty = config.default_difficulty
         self._init_board_by_difficulty()
+        self.hints_left = 3
 
         self.renderer = Renderer(self.screen, self.board)
         self.input = InputController(self)
@@ -175,6 +176,7 @@ class Game:
     def reset(self):
         """Reset the game state and start a new board."""
         self._init_board_by_difficulty()
+        self.hints_left = 3
 
         self.highlight_targets.clear()
         self.highlight_until_ms = 0
@@ -227,8 +229,10 @@ class Game:
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_r:
-            self.reset()
+                if event.key == pygame.K_r:
+                    self.reset()
+                if event.key == pygame.K_h:
+                    self.use_hint()
 
             # 난이도 선택 (게임 시작 전만 가능)
             if not self.started:
@@ -259,6 +263,27 @@ class Game:
         return
     self.difficulty = level
     self.reset()
+
+    def use_hint(self):
+    if not self.started or self.board.game_over or self.board.win:
+        return
+    if self.hints_left <= 0:
+        return
+
+    candidates = []
+    for r in range(self.board.rows):
+        for c in range(self.board.cols):
+            cell = self.board.cells[self.board.index(c, r)]
+            if not cell.state.is_revealed and not cell.state.is_mine:
+                candidates.append((c, r))
+
+    if not candidates:
+        return
+
+    import random
+    c, r = random.choice(candidates)
+    self.board.reveal(c, r)
+    self.hints_left -= 1
 
 
 def main() -> int:
