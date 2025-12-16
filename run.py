@@ -116,6 +116,10 @@ class InputController:
         return -1, -1
 
     def handle_mouse(self, pos, button) -> None:
+        game = self.game
+        if game.board.game_over ir game.board.win:
+            return
+            
         col, row = self.pos_to_grid(pos[0], pos[1])
         if col == -1:
             return
