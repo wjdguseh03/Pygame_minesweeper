@@ -111,6 +111,10 @@ class Renderer:
     label = self.font.render("RESTART", True, config.restart_button_text_color)
     label_rect = label.get_rect(center=rect.center)
     self.screen.blit(label, label_rect)
+    def draw_highscore(self, text: str):
+    label = self.font.render(text, True, config.color_header_text)
+    rect = label.get_rect(center=(config.width // 2, (config.height // 2) + 130))
+    self.screen.blit(label, rect)
 
 class InputController:
     """Translates input events into game and board actions."""
@@ -181,6 +185,8 @@ class Game:
     """Main application object orchestrating loop and high-level state."""
 
     def __init__(self):
+        self.highscore_ms = self._load_highscore()
+
         pygame.init()
         pygame.display.set_caption(config.title)
         self.screen = pygame.display.set_mode(config.display_dimension)
@@ -197,6 +203,15 @@ class Game:
         self.started = False
         self.start_ticks_ms = 0
         self.end_ticks_ms = 0
+    def _load_highscore(self):
+    try:
+        with open(config.highscore_file, "r") as f:
+            return int(f.read())
+    except:
+        return None
+    def _save_highscore(self, ms: int):
+    with open(config.highscore_file, "w") as f:
+        f.write(str(ms))
 
     def reset(self):
         """Reset the game state and start a new board."""
@@ -248,7 +263,16 @@ class Game:
         self.renderer.draw_result_overlay(self._result_text())
         if self._result_text():
             self.renderer.draw_restart_button(pygame.mouse.get_pos())
+        result = self._result_text()
+        self.renderer.draw_result_overlay(result)
 
+        if result:
+            self.renderer.draw_restart_button(pygame.mouse.get_pos())
+
+            if self.highscore_ms is not None:
+                hs_text = f"High Score: {self._format_time(self.highscore_ms)}"
+                self.renderer.draw_highscore(hs_text)
+                
         pygame.display.flip()
 
     def run_step(self) -> bool:
@@ -275,6 +299,15 @@ class Game:
                 self.input.handle_mouse(event.pos, event.button)
         if (self.board.game_over or self.board.win) and self.started and not self.end_ticks_ms:
             self.end_ticks_ms = pygame.time.get_ticks()
+
+        # 🏆 하이 스코어 갱신 (클리어 시만)
+            if self.board.win:
+            elapsed = self.end_ticks_ms - self.start_ticks_ms
+            if self.highscore_ms is None or elapsed < self.highscore_ms:
+                self.highscore_ms = elapsed
+                self._save_highscore(elapsed)
+
+            
         self.draw()
         self.clock.tick(config.fps)
         return True

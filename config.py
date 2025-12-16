@@ -109,3 +109,5 @@ restart_button_color = (80, 160, 80)
 restart_button_hover = (100, 180, 100)
 restart_button_text_color = (255, 255, 255)
 
+# High score
+highscore_file = "highscore.txt"
