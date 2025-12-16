@@ -160,7 +160,10 @@ class Game:
         pygame.display.set_caption(config.title)
         self.screen = pygame.display.set_mode(config.display_dimension)
         self.clock = pygame.time.Clock()
-        self.board = Board(config.cols, config.rows, config.num_mines)
+
+        self.difficulty = config.default_difficulty
+        self._init_board_by_difficulty()
+
         self.renderer = Renderer(self.screen, self.board)
         self.input = InputController(self)
         self.highlight_targets = set()
@@ -171,8 +174,8 @@ class Game:
 
     def reset(self):
         """Reset the game state and start a new board."""
-        self.board = Board(config.cols, config.rows, config.num_mines)
-        self.renderer.board = self.board
+        self._init_board_by_difficulty()
+
         self.highlight_targets.clear()
         self.highlight_until_ms = 0
         self.started = False
@@ -224,8 +227,18 @@ class Game:
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:
-                    self.reset()
+            if event.key == pygame.K_r:
+            self.reset()
+
+            # 난이도 선택 (게임 시작 전만 가능)
+            if not self.started:
+                if event.key == pygame.K_1:
+                    self.set_difficulty("EASY")
+                elif event.key == pygame.K_2:
+                    self.set_difficulty("NORMAL")
+                elif event.key == pygame.K_3:
+                    self.set_difficulty("HARD")
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.input.handle_mouse(event.pos, event.button)
         if (self.board.game_over or self.board.win) and self.started and not self.end_ticks_ms:
@@ -233,6 +246,19 @@ class Game:
         self.draw()
         self.clock.tick(config.fps)
         return True
+    def _init_board_by_difficulty(self):
+    diff = config.difficulties[self.difficulty]
+    self.board = Board(diff["cols"], diff["rows"], diff["mines"])
+    self.renderer.board = self.board
+
+    def set_difficulty(self, level: str):
+    # 게임 시작 후에는 변경 불가
+    if self.started:
+        return
+    if level not in config.difficulties:
+        return
+    self.difficulty = level
+    self.reset()
 
 
 def main() -> int:

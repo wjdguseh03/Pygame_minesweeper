@@ -81,3 +81,23 @@ result_overlay_alpha = 120
 # Misc
 title = "Minesweeper"
 
+# Difficulty presets
+difficulties = {
+    "EASY": {
+        "cols": 10,
+        "rows": 10,
+        "mines": 10,
+    },
+    "NORMAL": {
+        "cols": 16,
+        "rows": 16,
+        "mines": 40,
+    },
+    "HARD": {
+        "cols": 25,
+        "rows": 25,
+        "mines": 99,
+    },
+}
+
+default_difficulty = "NORMAL"
