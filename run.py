@@ -299,16 +299,16 @@ class Game:
                     self.set_difficulty("HARD")
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.input.handle_mouse(event.pos, event.button)
-            if (self.board.game_over or self.board.win) and self.started and not self.end_ticks_ms:
-                self.end_ticks_ms = pygame.time.get_ticks()
+            self.input.handle_mouse(event.pos, event.button)
+        if (self.board.game_over or self.board.win) and self.started and not self.end_ticks_ms:
+            self.end_ticks_ms = pygame.time.get_ticks()
 
         # 🏆 하이 스코어 갱신 (클리어 시만)
-                if self.board.win:
-                    elapsed = self.end_ticks_ms - self.start_ticks_ms
-                    if self.highscore_ms is None or elapsed < self.highscore_ms:
-                        self.highscore_ms = elapsed
-                        self._save_highscore(elapsed)
+            if self.board.win:
+                elapsed = self.end_ticks_ms - self.start_ticks_ms
+                if self.highscore_ms is None or elapsed < self.highscore_ms:
+                    self.highscore_ms = elapsed
+                    self._save_highscore(elapsed)
 
             
         self.draw()
