@@ -71,7 +71,7 @@ class Renderer:
                 )
         pygame.draw.rect(self.screen, config.color_grid, rect, 1)
 
-    def draw_header(self, remaining_mines: int, time_text: str) -> None:
+    def draw_header(self, remaining_mines: int, time_text: str, hints_left:int) -> None:
         """Draw the header bar containing remaining mines and elapsed time."""
         pygame.draw.rect(
             self.screen,
@@ -79,11 +79,21 @@ class Renderer:
             Rect(0, 0, config.width, config.margin_top - 4),
         )
         left_text = f"Mines: {remaining_mines}"
+        center_text = f"Mines:{hints_left}"
         right_text = f"Time: {time_text}"
+
         left_label = self.header_font.render(left_text, True, config.color_header_text)
+        center_label = self.header_font.render(center_text, True, config.color_header_text)
         right_label = self.header_font.render(right_text, True, config.color_header_text)
         self.screen.blit(left_label, (10, 12))
-        self.screen.blit(right_label, (config.width - right_label.get_width() - 10, 12))
+        self.screen.blit(
+            center_label,
+            ((config.width - center_label.get_width()) // 2, 12)
+        )
+        self.screen.blit(
+            right_label,
+            (config.width - right_label.get_width() - 10, 12)
+        )
 
     def draw_result_overlay(self, text: str | None) -> None:
         """Draw a semi-transparent overlay with centered result text, if any."""
