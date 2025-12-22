@@ -130,15 +130,17 @@ class InputController:
             return int(col), int(row)
         return -1, -1
 
-    def handle_mouse(self, pos, button) -> None:
+    def handle_mouse(self, pos, button):
         game = self.game
-        # 게임 종료 상태
+
+    # 게임 종료 상태일 때
         if game.board.game_over or game.board.win:
             if button == config.mouse_left:
                 rect = game.renderer.restart_button_rect()
                 if rect.collidepoint(pos):
                     game.reset()
-             return
+            return
+
 
 
         col, row = self.pos_to_grid(pos[0], pos[1])
