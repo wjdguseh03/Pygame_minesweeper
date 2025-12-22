@@ -207,8 +207,9 @@ class Game:
     try:
         with open(config.highscore_file, "r") as f:
             return int(f.read())
-    except:
+    except FileNotFoundError:
         return None
+
     def _save_highscore(self, ms: int):
     with open(config.highscore_file, "w") as f:
         f.write(str(ms))
