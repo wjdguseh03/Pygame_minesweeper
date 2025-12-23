@@ -81,3 +81,33 @@ result_overlay_alpha = 120
 # Misc
 title = "Minesweeper"
 
+# Difficulty presets
+difficulties = {
+    "EASY": {
+        "cols": 10,
+        "rows": 10,
+        "mines": 10,
+    },
+    "NORMAL": {
+        "cols": 16,
+        "rows": 16,
+        "mines": 40,
+    },
+    "HARD": {
+        "cols": 25,
+        "rows": 25,
+        "mines": 99,
+    },
+}
+
+default_difficulty = "NORMAL"
+
+# Restart button
+restart_button_width = 200
+restart_button_height = 60
+restart_button_color = (80, 160, 80)
+restart_button_hover = (100, 180, 100)
+restart_button_text_color = (255, 255, 255)
+
+# High score
+highscore_file = "highscore.txt"
