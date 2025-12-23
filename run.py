@@ -79,7 +79,7 @@ class Renderer:
             Rect(0, 0, config.width, config.margin_top - 4),
         )
         left_text = f"Mines: {remaining_mines}"
-        center_text = f"Mines:{hints_left}"
+        center_text = f"Hints: {hints_left}"
         right_text = f"Time: {time_text}"
 
         left_label = self.header_font.render(left_text, True, config.color_header_text)
@@ -153,7 +153,7 @@ class InputController:
                 rect = game.renderer.restart_button_rect()
                 if rect.collidepoint(pos):
                     game.reset()
-             return
+                return
 
 
         col, row = self.pos_to_grid(pos[0], pos[1])
@@ -296,20 +296,20 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     self.reset()
-                if event.key == pygame.K_h:
+                elif event.key == pygame.K_h:
                     self.use_hint()
 
             # 난이도 선택 (게임 시작 전만 가능)
-            if not self.started:
-                if event.key == pygame.K_1:
-                    self.set_difficulty("EASY")
-                elif event.key == pygame.K_2:
-                    self.set_difficulty("NORMAL")
-                elif event.key == pygame.K_3:
-                    self.set_difficulty("HARD")
+                if not self.started:
+                    if event.key == pygame.K_1:
+                        self.set_difficulty("EASY")
+                    elif event.key == pygame.K_2:
+                        self.set_difficulty("NORMAL")
+                    elif event.key == pygame.K_3:
+                        self.set_difficulty("HARD")
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-            self.input.handle_mouse(event.pos, event.button)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.input.handle_mouse(event.pos, event.button)
         if (self.board.game_over or self.board.win) and self.started and not self.end_ticks_ms:
             self.end_ticks_ms = pygame.time.get_ticks()
 
