@@ -20,8 +20,18 @@ Pygame을 이용해 구현한 지뢰찾기 게임입니다.
 난이도 선택 시 보드는 해당 설정으로 초기화되며,  
 게임이 시작된 이후에는 난이도를 변경할 수 없습니다.
 
-스크린샷  
-![Easy](screenshots/difficulty.png)
+**Easy**
+
+![Image](https://github.com/user-attachments/assets/a5a1052d-f870-40a2-a5aa-87e7712c17e9)
+
+**Normal**
+
+![Image](https://github.com/user-attachments/assets/1ae36cfd-2cc2-4dd8-ae6b-74f9bdb5d926)
+
+**Hard**
+
+![Image](https://github.com/user-attachments/assets/07c15262-1637-4c11-b217-b8bd5cf8b804)
+
 
 ---
 
@@ -35,8 +45,15 @@ Pygame을 이용해 구현한 지뢰찾기 게임입니다.
 - `H` 키를 눌러 힌트 사용 가능
 - 화면 상단에 힌트 사용 횟수 조회 가능
 
-스크린샷  
-![힌트 기능](screenshots/hint.png)
+**힌트를 쓰지 않은 상태(Hints:3)**
+
+![Image](https://github.com/user-attachments/assets/41c04d2d-9399-4c4b-a53a-63c3b8288b7c)
+
+
+**힌트를 모두 사용한 상태(Hints:0)**
+
+![Image](https://github.com/user-attachments/assets/b50a3023-3d0d-4273-acbd-d66f7688622d)
+
 
 ---
 
@@ -63,8 +80,13 @@ Pygame을 이용해 구현한 지뢰찾기 게임입니다.
 마우스 클릭 또는 `R` 키 입력으로 새 게임을 시작할 수 있습니다.  
 재시작 시 보드는 완전히 초기화됩니다.
 
-스크린샷  
-![결과 메시지 및 재시작](screenshots/restart.png)
+**게임 승리 시 Game Over 및 RESTART 버튼**
+
+![Image](https://github.com/user-attachments/assets/00bdb7f5-cbb6-4ed3-a562-d69e5d47481c)
+
+**게임 패배 시 Game Clear 및 RESTART 버튼**
+
+![Image](https://github.com/user-attachments/assets/675705fd-750b-499b-ac1c-8fdba1531047)
 
 ---
 
@@ -76,5 +98,6 @@ Pygame을 이용해 구현한 지뢰찾기 게임입니다.
 - 기존 기록보다 빠를 경우 갱신, 느릴 경우 기존 최고 기록 출력
 - 게임 종료 화면에서 재시작 버튼 밑에 하이 스코어를 함께 표시
 
-스크린샷  
-![하이 스코어](s)
+**하이 스코어 갱신**
+
+![Image](https://github.com/user-attachments/assets/6c5efe6b-5f98-4344-86b4-e9fcf1a1f227)
