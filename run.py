@@ -265,7 +265,7 @@ class Game:
         if pygame.time.get_ticks() > self.highlight_until_ms and self.highlight_targets:
             self.highlight_targets.clear()
         self.screen.fill(config.color_bg)
-        remaining = max(0, config.num_mines - self.board.flagged_count())
+        remaining = max(0, self.board.num_mines - self.board.flagged_count())
         time_text = self._format_time(self._elapsed_ms())
         self.renderer.draw_header(remaining, time_text, self.hints_left)
         now = pygame.time.get_ticks()
