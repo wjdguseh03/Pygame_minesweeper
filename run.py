@@ -153,7 +153,9 @@ class InputController:
                 rect = game.renderer.restart_button_rect()
                 if rect.collidepoint(pos):
                     game.reset()
-                return
+
+            # 좌/우/휠 어떤 클릭이든 게임이 종료되었다면 여기서 함수를 끝냄    
+            return
 
 
         col, row = self.pos_to_grid(pos[0], pos[1])
